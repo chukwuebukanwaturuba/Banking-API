@@ -3,6 +3,7 @@ package com.ebuka.bankingapi.service;
 import com.ebuka.bankingapi.model.payload.request.AccountCreationRequest;
 import com.ebuka.bankingapi.model.payload.request.AccountInfoRequest;
 import com.ebuka.bankingapi.model.payload.request.DepositRequest;
+import com.ebuka.bankingapi.model.payload.request.WithdrawalRequest;
 import com.ebuka.bankingapi.model.payload.response.AccountInfoResponse;
 import com.ebuka.bankingapi.model.payload.response.BaseResponse;
 
@@ -14,4 +15,6 @@ public interface AccountService {
     BaseResponse<?> getAccountBalance(AccountInfoRequest accountInfoRequest);
 
     BaseResponse<?> getAccountInfo(AccountInfoRequest accountInfoRequest);
+
+    BaseResponse<?> withdraw(WithdrawalRequest withdrawalRequest);
 }

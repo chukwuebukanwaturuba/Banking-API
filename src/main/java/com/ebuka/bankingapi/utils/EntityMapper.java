@@ -15,13 +15,8 @@ public class EntityMapper {
         newUser.setFirstname(customerRegistrationRequest.getFirstName());
         newUser.setLastname(customerRegistrationRequest.getLastName());
         newUser.setEmail(customerRegistrationRequest.getEmailAddress());
-        newUser.setDateOfBirth(formatDate(customerRegistrationRequest.getDateOfBirth()));
+        newUser.setDateOfBirth(ValidationUtils.formatDate(customerRegistrationRequest.getDateOfBirth()));
         newUser.setPhoneNumber(ValidationUtils.removeInternationalCode(customerRegistrationRequest.getPhoneNumber()));
         return newUser;
-    }
-
-    private static LocalDate formatDate(String dob) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return LocalDate.parse(dob, formatter);
     }
 }

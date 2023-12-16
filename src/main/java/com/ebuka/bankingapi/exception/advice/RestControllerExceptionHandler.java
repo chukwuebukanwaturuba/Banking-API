@@ -2,6 +2,7 @@ package com.ebuka.bankingapi.exception.advice;
 
 import com.ebuka.bankingapi.exception.BadRequestException;
 import com.ebuka.bankingapi.exception.DuplicateUserException;
+import com.ebuka.bankingapi.exception.InsufficientBalanceException;
 import com.ebuka.bankingapi.model.payload.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,11 +23,21 @@ public class RestControllerExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(DuplicateUserException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage duplicateUserException(DuplicateUserException duplicateUserException) {
         return ErrorMessage.builder()
                 .message(duplicateUserException.getMessage())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .time(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorMessage insufficientBalanceException(InsufficientBalanceException insufficientBalanceException) {
+        return ErrorMessage.builder()
+                .message(insufficientBalanceException.getMessage())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .time(LocalDateTime.now())
                 .build();

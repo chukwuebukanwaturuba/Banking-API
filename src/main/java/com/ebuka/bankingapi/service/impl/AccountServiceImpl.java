@@ -1,11 +1,10 @@
 package com.ebuka.bankingapi.service.impl;
 
 import com.ebuka.bankingapi.exception.BadRequestException;
+import com.ebuka.bankingapi.exception.InsufficientBalanceException;
 import com.ebuka.bankingapi.model.entity.Account;
 import com.ebuka.bankingapi.model.enums.CurrencyType;
-import com.ebuka.bankingapi.model.payload.request.AccountCreationRequest;
-import com.ebuka.bankingapi.model.payload.request.AccountInfoRequest;
-import com.ebuka.bankingapi.model.payload.request.DepositRequest;
+import com.ebuka.bankingapi.model.payload.request.*;
 import com.ebuka.bankingapi.model.payload.response.AccountInfoResponse;
 import com.ebuka.bankingapi.model.payload.response.BaseResponse;
 import com.ebuka.bankingapi.model.payload.response.DepositResponse;
@@ -51,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
                 log.error(Constants.BAD_REQUEST);
                 throw new BadRequestException(Constants.BAD_REQUEST);
             }
-            Optional<Account> accountOptional = accountRepository.findAccountByAccountNumberAndCurrencyType(depositRequest.getAccountNumber(), CurrencyType.valueOf(depositRequest.getCurrency()));
+            Optional<Account> accountOptional = accountRepository.findAccountByAccountNumberAndCurrencyType(depositRequest.getAccountNumber(), CurrencyType.valueOf(depositRequest.getCurrencyType()));
             if (accountOptional.isPresent()) {
                 var foundAccount = accountOptional.get();
                 foundAccount.setBalance(foundAccount.getBalance().add(depositRequest.getAmount()));
@@ -70,7 +69,7 @@ public class AccountServiceImpl implements AccountService {
 
         var depositDetails = DepositResponse.builder()
                 .amount(depositRequest.getAmount())
-                .currencyType(depositRequest.getCurrency())
+                .currencyType(depositRequest.getCurrencyType())
                 .accountNumber(depositRequest.getAccountNumber())
                 .build();
         return BaseResponse.builder()
@@ -103,6 +102,9 @@ public class AccountServiceImpl implements AccountService {
                         .statusCode(HttpStatus.OK.value())
                         .data(accountInfo)
                         .build();
+            } else {
+                log.info(Constants.ACCOUNT_DOES_NOT_EXIST);
+                throw new BadRequestException(Constants.ACCOUNT_DOES_NOT_EXIST);
             }
         } catch (Exception e) {
             return BaseResponse.builder()
@@ -135,8 +137,50 @@ public class AccountServiceImpl implements AccountService {
                         .data(accountInfo)
                         .build();
             } else {
-                log.info(Constants.BAD_REQUEST);
+                log.info(Constants.ACCOUNT_DOES_NOT_EXIST);
+                throw new BadRequestException(Constants.ACCOUNT_DOES_NOT_EXIST);
+            }
+        } catch (Exception e) {
+            return BaseResponse.builder()
+                    .message("[ Error: ]" + e.getMessage())
+                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .data(null)
+                    .build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse<?> withdraw(WithdrawalRequest withdrawalRequest) {
+        try {
+            if (Objects.isNull(withdrawalRequest)) {
+                log.error(Constants.BAD_REQUEST);
                 throw new BadRequestException(Constants.BAD_REQUEST);
+            }
+            Optional<Account> accountOptional = accountRepository.findAccountByAccountNumberAndCurrencyType(withdrawalRequest.getAccountNumber(), CurrencyType.valueOf(withdrawalRequest.getCurrencyType()));
+            if (accountOptional.isPresent()) {
+                var foundAccount = accountOptional.get();
+                if (foundAccount.getBalance().compareTo(withdrawalRequest.getAmount()) >= 0) {
+                    foundAccount.setBalance(foundAccount.getBalance().subtract(withdrawalRequest.getAmount()));
+                    accountRepository.save(foundAccount);
+                    var depositDetails = DepositResponse.builder()
+                            .amount(withdrawalRequest.getAmount())
+                            .currencyType(withdrawalRequest.getCurrencyType())
+                            .accountNumber(withdrawalRequest.getAccountNumber())
+                            .build();
+                    return BaseResponse.builder()
+                            .statusCode(HttpStatus.OK.value())
+                            .message("Successfully deposited into account")
+                            .data(depositDetails)
+                            .build();
+                } else {
+                    log.error(Constants.INSUFFICIENT_BALANCE);
+                    throw new InsufficientBalanceException(Constants.INSUFFICIENT_BALANCE);
+                }
+
+            } else {
+                log.error(Constants.ACCOUNT_DOES_NOT_EXIST);
+                throw new BadRequestException(Constants.ACCOUNT_DOES_NOT_EXIST);
             }
         } catch (Exception e) {
             return BaseResponse.builder()

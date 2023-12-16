@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             User newUser = EntityMapper.resolveToUserEntity(customerRegistrationRequest);
             newUser.setPassword(passwordEncoder.encode(customerRegistrationRequest.getPassword()));
-            newUser.setRole(Role.CUSTOMER);
+            newUser.setRole(Role.ROLE_CUSTOMER);
 
             User savedUser = customerRepository.save(newUser);
 
@@ -67,26 +67,6 @@ public class CustomerServiceImpl implements CustomerService {
                     .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .build();
         }
-    }
-
-    @Override
-    public BaseResponse<?> deposit(DepositRequest depositRequest) {
-        return null;
-    }
-
-    @Override
-    public BaseResponse<?> withdraw(WithdrawalRequest withdrawalRequest) {
-        return null;
-    }
-
-    @Override
-    public BaseResponse<?> generateStatementOfAccount(StatementOfAccountRequest statementOfAccountRequest) {
-        return null;
-    }
-
-    @Override
-    public BaseResponse<?> checkBalance(AccountInfoRequest accountInfoRequest) {
-        return null;
     }
 
     private boolean resolveCustomerExists(String emailAddress) {
