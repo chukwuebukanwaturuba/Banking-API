@@ -6,4 +6,6 @@ public interface Constants {
     String WRONG_PASSWORD = "entered a wrong password";
     String BAD_REQUEST = "bad request";
     String ACCOUNT_DOES_NOT_EXIST = "account does not exist";
+    String INSUFFICIENT_BALANCE = "insufficient balance";
+    String NO_TRANSACTIONS_FOUND = "no transactions found";
 }

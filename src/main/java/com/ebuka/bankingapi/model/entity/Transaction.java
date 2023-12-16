@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,16 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "transactions_tbl")
 @Entity
-public class Transaction {
-    @Id
-    @GeneratedValue
-    private Long Id;
+public class Transaction extends BaseEntity {
 
     @Column(name = "trx_amount", nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "narration")
+    private String narration;
 
     @Column(name = "trx_type", nullable = false)
     private TransactionType type;

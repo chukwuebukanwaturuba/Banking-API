@@ -2,7 +2,7 @@ package com.ebuka.bankingapi.controller;
 
 import com.ebuka.bankingapi.model.payload.request.AccountInfoRequest;
 import com.ebuka.bankingapi.model.payload.request.DepositRequest;
-import com.ebuka.bankingapi.model.payload.request.LoginRequest;
+import com.ebuka.bankingapi.model.payload.request.WithdrawalRequest;
 import com.ebuka.bankingapi.model.payload.response.BaseResponse;
 import com.ebuka.bankingapi.service.AccountService;
 import jakarta.validation.Valid;
@@ -51,6 +51,17 @@ public class AccountController {
     public ResponseEntity<BaseResponse<?>> getAccountInfo(@Valid @RequestBody DepositRequest depositRequest) {
         try {
             BaseResponse<?> br = accountService.deposit(depositRequest);
+            return ResponseEntity.ok(br);
+        } catch (Exception e) {
+            log.error("[ Error ]: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/account/withdraw")
+    public ResponseEntity<BaseResponse<?>> withdraw(@Valid @RequestBody WithdrawalRequest withdrawalRequest) {
+        try {
+            BaseResponse<?> br = accountService.withdraw(withdrawalRequest);
             return ResponseEntity.ok(br);
         } catch (Exception e) {
             log.error("[ Error ]: {}", e.getMessage());

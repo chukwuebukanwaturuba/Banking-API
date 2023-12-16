@@ -18,16 +18,15 @@ import java.math.BigDecimal;
 public class DepositRequest implements Serializable {
 
     @JsonProperty("amount")
-
-    @NotNull
+    @NotNull(message = "deposit amount cannot be null")
     @PositiveOrZero(message = "Balance must be zero or a positive number")
     private BigDecimal amount;
 
     @JsonProperty("acc_number")
-    @NotNull
+    @NotNull(message = "account number cannot be null")
     private String accountNumber;
 
-    @JsonProperty("currency")
-    @NotNull
-    private String currency;
+    @JsonProperty("currency_type")
+    @NotNull(message = "currency type cannot be null")
+    private String currencyType;
 }
