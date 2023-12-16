@@ -1,5 +1,7 @@
 package com.ebuka.bankingapi.model.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +15,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AccountInfoRequest implements Serializable {
 
+    @JsonProperty("account_number")
     private String accountNumber;
 }

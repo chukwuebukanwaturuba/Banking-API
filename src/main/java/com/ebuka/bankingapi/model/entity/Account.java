@@ -32,7 +32,7 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_fk", nullable = false)
     private User user;
 
@@ -41,6 +41,6 @@ public class Account {
     private AccountType accountType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "currency_type", nullable = false)
+    @Column(name = "acc_ccy_type", nullable = false)
     private CurrencyType currencyType;
 }
