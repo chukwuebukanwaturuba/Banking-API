@@ -1,4 +1,4 @@
-package com.ebuka.bankingapi.model.payload;
+package com.ebuka.bankingapi.model.payload.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

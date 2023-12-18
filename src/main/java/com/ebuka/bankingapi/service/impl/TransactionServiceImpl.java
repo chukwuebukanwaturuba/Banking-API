@@ -2,7 +2,7 @@ package com.ebuka.bankingapi.service.impl;
 
 import com.ebuka.bankingapi.exception.BadRequestException;
 import com.ebuka.bankingapi.model.entity.Transaction;
-import com.ebuka.bankingapi.model.payload.AccountStatementResponse;
+import com.ebuka.bankingapi.model.payload.response.AccountStatementResponse;
 import com.ebuka.bankingapi.model.payload.request.AccountStatementRequest;
 import com.ebuka.bankingapi.model.payload.response.BaseResponse;
 import com.ebuka.bankingapi.model.repository.TransactionRepository;

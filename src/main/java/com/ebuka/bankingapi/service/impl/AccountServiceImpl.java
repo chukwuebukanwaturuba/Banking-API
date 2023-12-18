@@ -74,7 +74,7 @@ public class AccountServiceImpl implements AccountService {
                 .build();
         return BaseResponse.builder()
                 .statusCode(HttpStatus.OK.value())
-                .message("Successfully deposited into account")
+                .message("Successfully deposited into account. Your account balance is NGN")
                 .data(depositDetails)
                 .build();
     }
@@ -170,7 +170,7 @@ public class AccountServiceImpl implements AccountService {
                             .build();
                     return BaseResponse.builder()
                             .statusCode(HttpStatus.OK.value())
-                            .message("Successfully deposited into account")
+                            .message("Successfully withdraw from the account. your account balance is: NGN" + foundAccount.getBalance())
                             .data(depositDetails)
                             .build();
                 } else {
